@@ -9,6 +9,10 @@ app.get("/", (req, res) => {
   res.render("home.ejs");
 });
 
+app.get("/games", (req, res) => {
+  res.render("games.ejs");
+});
+
 app.listen(PORT, () => {
   console.log("Server running on http://localhost:3000");
 });
