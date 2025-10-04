@@ -1,1 +1,37 @@
-<h1>games</h1>
+<%- include('partials/header') %>
+<h1>Games</h1>
+
+<form method="get" action="/games">
+  <input type="text" name="search" placeholder="Search games..." value="<%= typeof search !== 'undefined' ? search : '' %>">
+  <button type="submit">Search</button>
+</form>
+
+<div>
+  <% games.forEach(game => { %>
+    <div>
+      <% if (game.cover && game.cover.url) { %>
+        <img src="https://images.igdb.com/igdb/image/upload/t_cover_big/<%= game.cover.url.split('/').pop() %>" alt="<%= game.name %> cover">
+      <% } else { %>
+        <div>No Cover</div>
+      <% } %>
+      <h2><%= game.name %></h2>
+      <% if (game.first_release_date) { %>
+        <p>Release: <%= new Date(game.first_release_date * 1000).toLocaleDateString() %></p>
+      <% } else { %>
+        <p>Release: Unknown</p>
+      <% } %>
+    </div>
+  <% }) %>
+</div>
+
+<div>
+  <% if (page > 1) { %>
+    <a href="/games?page=<%= page - 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %>">Previous</a>
+  <% } %>
+  <span>Page <%= page %></span>
+  <% if (games.length === 49) { %>
+    <a href="/games?page=<%= page + 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %>">Next</a>
+  <% } %>
+</div>
+
+<%- include('partials/footer') %>
