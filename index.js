@@ -40,7 +40,7 @@ async function fetchGames(page = 1, limit = 49, search = "") {
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('src'));
+
 
 
 
