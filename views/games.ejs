@@ -1,6 +1,5 @@
 <%- include('partials/header') %>
 <div class="wrapper">
-<h1>Games</h1>
 
 <form class="search" method="get" action="/games">
   <input type="text" name="search" placeholder="Search games..." value="<%= typeof search !== 'undefined' ? search : '' %>">
