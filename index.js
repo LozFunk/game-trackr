@@ -40,28 +40,33 @@ async function fetchGames(page = 1, limit = 49, search = "") {
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
 
 
 
+// For home page
 app.get("/", (req, res) => {
-  res.render("home.ejs");
+  res.render("home.ejs", { page: "home" });
 });
 
+// For about page
 app.get("/about", (req, res) => {
-  res.render("about.ejs");
+  res.render("about.ejs", { page: "about" });
 });
 
+// For contact page
 app.get("/contact", (req, res) => {
-  res.render("contact.ejs");
+  res.render("contact.ejs", { page: "contact" });
 });
 
+// For games page
 app.get("/games", async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = 49;
   const search = req.query.search || "";
   const games = await fetchGames(page, limit, search);
-  res.render("games.ejs", { games, page, search });
+  res.render("games.ejs", { games, page, search: "games" });
 });
 
 

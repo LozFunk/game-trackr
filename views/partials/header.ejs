@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Game Trackr</title>
-   <link href="/output.css" rel="stylesheet">
+   <link href="/style.css" rel="stylesheet">
 </head>
 <body>
 
@@ -13,10 +13,10 @@
 <div>
     <nav>
         <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/contact">Contact</a></li>
-            <li><a href="/games">Games</a></li>
+            <li><a href="/" class="<%= page === 'home' ? 'active' : '' %>">Home</a></li>
+            <li><a href="/about" class="<%= page === 'about' ? 'active' : '' %>">About</a></li>
+            <li><a href="/contact" class="<%= page === 'contact' ? 'active' : '' %>">Contact</a></li>
+            <li><a href="/games" class="<%= page === 'games' ? 'active' : '' %>">Games</a></li>
         </ul>
     </nav>
 </div>

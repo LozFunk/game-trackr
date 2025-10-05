@@ -1,0 +1,163 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #222d3b;
+    color: #e2e2e2;
+    line-height: 1.6;
+}
+
+.wrapper {
+    max-width: 77%;
+    padding: 20px;
+    margin: 0 auto;
+}
+
+nav {
+    background-color: #1c2533;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}  
+
+nav ul li a {
+    color: #e2e2e2;
+    text-decoration: none;
+    font-weight: bold;
+}   
+nav ul li a:hover {
+    color:#5c6bc0;
+    
+}
+
+nav ul li a.active {
+    padding-bottom: 20px;
+    border-bottom: #5c6bc0 solid 4px;
+    color:#5c6bc0;
+}
+
+h1{
+    margin-bottom: 10px;
+    color: #f0f0f0;
+    text-align: center;
+}
+
+.search {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.search input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+}
+
+.search button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #5c6bc0;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search button:hover {
+    background-color: #3949ab;
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.game-card {
+  background: transparent;
+  border-radius: 1rem;
+  box-shadow: 0 4px 24px #0004;
+  width: 240px;
+  padding: 1.5rem 1rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.game-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 8px 32px #0007;
+}
+
+.game-card img {
+  width: 220px;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  background: #18181b;
+}
+
+.game-card .no-cover {
+  width: 180px;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #18181b;
+  color: #71717a;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.game-card h2 {
+  font-size: 1.1rem;
+  margin: 0.5rem 0 0.2rem 0;
+  text-align: center;
+}
+
+.game-card p {
+  color: #a1a1aa;
+  font-size: 0.95rem;
+  margin: 0;
+  text-align: center;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.pagination a, .pagination span {
+  background: #27272a;
+  color: #f4f4f5;
+  padding: 0.5rem 1.2rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.pagination a:hover {
+  background: #6366f1;
+  color: #fff;
+}

@@ -1,18 +1,19 @@
 <%- include('partials/header') %>
+<div class="wrapper">
 <h1>Games</h1>
 
-<form method="get" action="/games">
+<form class="search" method="get" action="/games">
   <input type="text" name="search" placeholder="Search games..." value="<%= typeof search !== 'undefined' ? search : '' %>">
   <button type="submit">Search</button>
 </form>
 
-<div>
+<div class="cards-container">
   <% games.forEach(game => { %>
-    <div>
+    <div class="game-card">
       <% if (game.cover && game.cover.url) { %>
         <img src="https://images.igdb.com/igdb/image/upload/t_cover_big/<%= game.cover.url.split('/').pop() %>" alt="<%= game.name %> cover">
       <% } else { %>
-        <div>No Cover</div>
+        <div class="no-cover">No Cover</div>
       <% } %>
       <h2><%= game.name %></h2>
       <% if (game.first_release_date) { %>
@@ -24,14 +25,22 @@
   <% }) %>
 </div>
 
-<div>
-  <% if (page > 1) { %>
-    <a href="/games?page=<%= page - 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %>">Previous</a>
+<div class="pagination">
+  <% 
+    const prevPage = page > 1 ? page - 1 : null;
+    const nextPage = games.length === 49 ? page + 1 : null;
+  %>
+  <% if (prevPage) { %>
+    <a href="/games?page=<%= prevPage %><%= search ? '&search=' + encodeURIComponent(search) : '' %>">&larr;</a>
+    <a href="/games?page=<%= prevPage %><%= search ? '&search=' + encodeURIComponent(search) : '' %>"><%= prevPage %></a>
   <% } %>
-  <span>Page <%= page %></span>
-  <% if (games.length === 49) { %>
-    <a href="/games?page=<%= page + 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %>">Next</a>
+  <span><%= page %></span>
+  <% if (nextPage) { %>
+    <a href="/games?page=<%= nextPage %><%= search ? '&search=' + encodeURIComponent(search) : '' %>"><%= nextPage %></a>
+    <a href="/games?page=<%= nextPage %><%= search ? '&search=' + encodeURIComponent(search) : '' %>">&rarr;</a>
   <% } %>
 </div>
+</div>
+
 
 <%- include('partials/footer') %>
