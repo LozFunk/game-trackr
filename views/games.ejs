@@ -37,8 +37,8 @@
     <!-- Pagination -->
     <div class="pagination">
       <% 
-        const prevPage = page > 1 ? page - 1 : null;
-        const nextPage = games.length === 49 ? page + 1 : null;
+        const prevPage = gamespage > 1 ? gamespage - 1 : null;
+        const nextPage = games.length === 49 ? gamespage + 1 : null;
       %>
 
       <% if (prevPage) { %>
@@ -46,7 +46,7 @@
         <a href="/games?page=<%= prevPage %><%= search ? '&search=' + encodeURIComponent(search) : '' %>"><%= prevPage %></a>
       <% } %>
 
-      <span><%= page %></span>
+      <span><%= gamespage %></span>
 
       <% if (nextPage) { %>
         <a href="/games?page=<%= nextPage %><%= search ? '&search=' + encodeURIComponent(search) : '' %>"><%= nextPage %></a>

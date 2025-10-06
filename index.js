@@ -59,11 +59,11 @@ app.get("/contact", (req, res) => {
 });
 
 app.get("/games", async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
+  const gamespage = parseInt(req.query.page) || 1;
   const limit = 49;
   const search = req.query.search || "";
-  const games = await fetchGames(page, limit, search);
-  res.render("games.ejs", { games, page, search: "games" });
+  const games = await fetchGames(gamespage, limit, search);
+  res.render("games.ejs", { games, gamespage, page:"games", search: "games" });
 });
 
 

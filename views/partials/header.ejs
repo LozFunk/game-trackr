@@ -3,20 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Game Trackr</title>
-   <link href="/style.css" rel="stylesheet">
+    <title>Game Trackr</title>
+    <link href="/style.css" rel="stylesheet">
 </head>
 <body>
 
 
 
-<div>
-    <nav>
+<div class="nav-bg">
+    <nav class="wrapper">
         <ul>
             <li><a href="/" class="<%= page === 'home' ? 'active' : '' %>">Home</a></li>
             <li><a href="/about" class="<%= page === 'about' ? 'active' : '' %>">About</a></li>
             <li><a href="/contact" class="<%= page === 'contact' ? 'active' : '' %>">Contact</a></li>
             <li><a href="/games" class="<%= page === 'games' ? 'active' : '' %>">Games</a></li>
         </ul>
+        
+        <div class="auth-links">
+            <a class="button signup" href="">Sign Up</a>
+            <a class="button login" href="">Login</a>
+        </div>
     </nav>
 </div>
