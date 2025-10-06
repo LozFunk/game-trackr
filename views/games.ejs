@@ -2,26 +2,30 @@
 <div class="wrapper">
 
 <form class="search" method="get" action="/games">
-  <input type="text" name="search" placeholder="Search games..." value="<%= typeof search !== 'undefined' ? search : '' %>">
+  <input type="text" name="search" placeholder="Search games..." >
   <button type="submit">Search</button>
 </form>
 
 <div class="cards-container">
-  <% games.forEach(game => { %>
-    <div class="game-card">
-      <% if (game.cover && game.cover.url) { %>
-        <img src="https://images.igdb.com/igdb/image/upload/t_cover_big/<%= game.cover.url.split('/').pop() %>" alt="<%= game.name %> cover">
-      <% } else { %>
-        <div class="no-cover">No Cover</div>
-      <% } %>
-      <h2><%= game.name %></h2>
-      <% if (game.first_release_date) { %>
-        <p>Release: <%= new Date(game.first_release_date * 1000).toLocaleDateString() %></p>
-      <% } else { %>
-        <p>Release: Unknown</p>
-      <% } %>
-    </div>
-  <% }) %>
+    <% if (games.length>0) {%>
+        <% games.forEach(game => { %>
+            <div class="game-card">
+            <% if (game.cover && game.cover.url) { %>
+                <img src="https://images.igdb.com/igdb/image/upload/t_cover_big/<%= game.cover.url.split('/').pop() %>" alt="<%= game.name %> cover">
+            <% } else { %>
+                <div class="no-cover">No Cover</div>
+            <% } %>
+            <h2><%= game.name %></h2>
+            <% if (game.first_release_date) { %>
+                <p>Release: <%= new Date(game.first_release_date * 1000).toLocaleDateString() %></p>
+            <% } else { %>
+                <p>Release: Unknown</p>
+            <% } %>
+            </div>
+        <% }) %>
+    <%  }else{%>
+        <p>No games found.<p>
+    <% } %>
 </div>
 
 <div class="pagination">

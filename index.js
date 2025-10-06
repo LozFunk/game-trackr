@@ -46,22 +46,18 @@ app.use(express.static("public"));
 
 
 
-// For home page
 app.get("/", (req, res) => {
   res.render("home.ejs", { page: "home" });
 });
 
-// For about page
 app.get("/about", (req, res) => {
   res.render("about.ejs", { page: "about" });
 });
 
-// For contact page
 app.get("/contact", (req, res) => {
   res.render("contact.ejs", { page: "contact" });
 });
 
-// For games page
 app.get("/games", async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = 49;
