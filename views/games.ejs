@@ -1,49 +1,61 @@
 <%- include('partials/header') %>
+
 <div class="wrapper">
 
-<form class="search" method="get" action="/games">
-  <input type="text" name="search" placeholder="Search games..." >
-  <button type="submit">Search</button>
-</form>
+  <form class="search" method="get" action="/games">
+    <input type="text" name="search" placeholder="Search games..." >
+    <button type="submit">Search</button>
+  </form>
 
-<div class="cards-container">
-    <% if (games.length>0) {%>
-        <% games.forEach(game => { %>
-            <div class="game-card">
-            <% if (game.cover && game.cover.url) { %>
-                <img src="https://images.igdb.com/igdb/image/upload/t_cover_big/<%= game.cover.url.split('/').pop() %>" alt="<%= game.name %> cover">
-            <% } else { %>
-                <div class="no-cover">No Cover</div>
-            <% } %>
-            <h2><%= game.name %></h2>
-            <% if (game.first_release_date) { %>
-                <p>Release: <%= new Date(game.first_release_date * 1000).toLocaleDateString() %></p>
-            <% } else { %>
-                <p>Release: Unknown</p>
-            <% } %>
-            </div>
-        <% }) %>
-    <%  }else{%>
-        <p>No games found.<p>
+  <div class="cards-container">
+    <% if (games.length > 0) { %>
+      <% games.forEach(game => { %>
+        <div class="game-card">
+          <% if (game.cover && game.cover.url) { %>
+            <img 
+              src="https://images.igdb.com/igdb/image/upload/t_cover_big/<%= game.cover.url.split('/').pop() %>" 
+              alt="<%= game.name %> cover">
+          <% } else { %>
+            <div class="no-cover">No Cover</div>
+          <% } %>
+
+          <h2><%= game.name %></h2>
+
+          <% if (game.first_release_date) { %>
+            <p>Release: <%= new Date(game.first_release_date * 1000).toLocaleDateString() %></p>
+          <% } else { %>
+            <p>Release: Unknown</p>
+          <% } %>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p class="no-results">No games found.</p>
     <% } %>
-</div>
+  </div>
 
-<div class="pagination">
-  <% 
-    const prevPage = page > 1 ? page - 1 : null;
-    const nextPage = games.length === 49 ? page + 1 : null;
-  %>
-  <% if (prevPage) { %>
-    <a href="/games?page=<%= prevPage %><%= search ? '&search=' + encodeURIComponent(search) : '' %>">&larr;</a>
-    <a href="/games?page=<%= prevPage %><%= search ? '&search=' + encodeURIComponent(search) : '' %>"><%= prevPage %></a>
-  <% } %>
-  <span><%= page %></span>
-  <% if (nextPage) { %>
-    <a href="/games?page=<%= nextPage %><%= search ? '&search=' + encodeURIComponent(search) : '' %>"><%= nextPage %></a>
-    <a href="/games?page=<%= nextPage %><%= search ? '&search=' + encodeURIComponent(search) : '' %>">&rarr;</a>
-  <% } %>
-</div>
-</div>
+  <% if (games.length > 0) { %>
+    <!-- Pagination -->
+    <div class="pagination">
+      <% 
+        const prevPage = page > 1 ? page - 1 : null;
+        const nextPage = games.length === 49 ? page + 1 : null;
+      %>
 
+      <% if (prevPage) { %>
+        <a href="/games?page=<%= prevPage %><%= search ? '&search=' + encodeURIComponent(search) : '' %>">&larr;</a>
+        <a href="/games?page=<%= prevPage %><%= search ? '&search=' + encodeURIComponent(search) : '' %>"><%= prevPage %></a>
+      <% } %>
+
+      <span><%= page %></span>
+
+      <% if (nextPage) { %>
+        <a href="/games?page=<%= nextPage %><%= search ? '&search=' + encodeURIComponent(search) : '' %>"><%= nextPage %></a>
+        <a href="/games?page=<%= nextPage %><%= search ? '&search=' + encodeURIComponent(search) : '' %>">&rarr;</a>
+      <% } %>
+    </div>
+  <% } %>
+
+</div>
 
 <%- include('partials/footer') %>
+
