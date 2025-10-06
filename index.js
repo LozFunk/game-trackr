@@ -66,6 +66,14 @@ app.get("/games", async (req, res) => {
   res.render("games.ejs", { games, gamespage, page:"games", search: "games" });
 });
 
+app.get("/register", (req, res) => {
+  res.render("register.ejs", { page: "register" });
+});
+
+app.get("/login", (req, res) => {
+  res.render("login.ejs", { page: "login" });
+}); 
+
 
 app.listen(PORT, () => {
   console.log("Server running on http://localhost:3000");
