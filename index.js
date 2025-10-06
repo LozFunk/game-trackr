@@ -1,11 +1,12 @@
 import express from 'express';  
 import bodyParser from 'body-parser';
 import fetch from 'node-fetch';
+import env from 'dotenv';
 
-//id = xv03o02gyy0j5dw85nmwiruuh6yg5c
-//secret = a608dbbg8bayo1an018t9j506numlp
-const clientId = 'xv03o02gyy0j5dw85nmwiruuh6yg5c';
-const clientSecret = 'a608dbbg8bayo1an018t9j506numlp';
+env.config();
+
+const clientId = process.env.API_CLIENT_ID;
+const clientSecret = process.env.API_CLIENT_SECRET;
 
 async function getAccessToken() {
   const response = await fetch(
@@ -38,7 +39,7 @@ async function fetchGames(page = 1, limit = 49, search = "") {
 }
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
