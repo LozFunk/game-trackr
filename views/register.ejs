@@ -9,19 +9,25 @@
 <div class="form-container">
     <form action="/register" method="POST">
         <div>
-            <label for="username">Username</label>
-            <input class="search" type="text">
+            <label for="username" hidden>Username</label>
+            <input class="input-field" type="text" placeholder="Username" name="username" required>
         </div>
         <div>
-            <label for="email">Email</label>
-            <input class="search" type="email" name="email">
+            <label for="email" hidden>Email</label>
+            <input class="input-field" type="email" name="email" placeholder="Email" required>
         </div>
         <div>
-            <label for="password">Password</label>
-            <input class="search" type="password" name="password">
+            <label for="password" hidden>Password</label>
+            <input class="input-field" type="password" name="password" placeholder="Password" required>
         </div>
-        
-        <button class="button" type="submit">Register</button>
+        <div>
+            <label for="repeatPassword" hidden>Password</label>
+            <input class="input-field" type="password" name="repeatPassword" placeholder="Repeat your password" required>
+        </div>
+
+        <div>
+            <button class="button register-btn" type="submit">Register</button>
+        </div>
     </form>
 
     <div>
@@ -30,6 +36,10 @@
         Sign Up with Google
         </a>
     </div>
+
+    <div><p>Already have an account? <a href="/login">Login
+
+    </a></p></div>
 </div>
 
 

@@ -1,0 +1,55 @@
+<%- include('partials/header') %>
+<body class="game-page">
+  <div class="container">
+    <a href="/games" class="back-link">← Back to Games</a>
+
+    <div class="game-header">
+      <img src="<%= game.cover ? game.cover.url.replace('t_thumb', 't_cover_big') : '/placeholder.jpg' %>" alt="<%= game.name %>" class="cover">
+
+      <div class="game-meta">
+        <h1><%= game.name %></h1>
+
+        <% if (game.first_release_date) { %>
+          <p><strong>Release Date:</strong> <%= new Date(game.first_release_date * 1000).toLocaleDateString() %></p>
+        <% } %>
+
+        <% if (game.rating) { %>
+          <p><strong>Rating:</strong> <%= game.rating.toFixed(1) %>/100</p>
+        <% } %>
+
+        <% if (game.popularity) { %>
+          <p><strong>Popularity:</strong> <%= Math.round(game.popularity) %></p>
+        <% } %>
+
+        <% if (game.platforms) { %>
+          <p><strong>Platforms:</strong> <%= game.platforms.map(p => p.name).join(', ') %></p>
+        <% } %>
+
+        <% if (game.genres) { %>
+          <p><strong>Genres:</strong> <%= game.genres.map(g => g.name).join(', ') %></p>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="game-body">
+      <% if (game.summary) { %>
+        <h2>Summary</h2>
+        <p><%= game.summary %></p>
+      <% } %>
+
+      <% if (game.storyline) { %>
+        <h2>Storyline</h2>
+        <p><%= game.storyline %></p>
+      <% } %>
+
+      <% if (game.screenshots) { %>
+        <h2>Screenshots</h2>
+        <div class="screenshots">
+          <% game.screenshots.forEach(ss => { %>
+            <img src="<%= ss.url.replace('t_thumb', 't_1080p') %>" alt="Screenshot">
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+  <%- include('partials/footer') %>

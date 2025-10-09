@@ -20,23 +20,59 @@ async function getAccessToken() {
 async function fetchGames(page = 1, limit = 49, search = "") {
   const token = await getAccessToken();
   const offset = (page - 1) * limit;
-  let query = `fields name,cover.url,first_release_date; limit ${limit}; offset ${offset};`;
+
+  let query = `
+    fields id, cover.url, name, first_release_date, rating, summary, platforms.name, genres.name;
+    sort rating desc;
+    limit ${limit};
+    offset ${offset};
+  `;
+
   if (search) {
-    // IGDB search uses the 'search' keyword
-    query = `search "${search}"; ` + query;
+    query = `search "${search}"; ${query}`;
   }
-  const response = await fetch('https://api.igdb.com/v4/games', {
-    method: 'POST',
+
+  const response = await fetch("https://api.igdb.com/v4/games", {
+    method: "POST",
     headers: {
-      'Client-ID': clientId,
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/json'
+      "Client-ID": clientId,
+      "Authorization": `Bearer ${token}`,
+      "Accept": "application/json"
     },
     body: query
   });
-  const games = await response.json();
-  return games; 
+
+  const data = await response.json();
+  return data;
 }
+
+
+async function fetchGameById(gameId) {
+  const token = await getAccessToken();
+
+  const query = `
+    fields id, name, summary, storyline, rating, total_rating,
+           first_release_date, genres.name, cover.url, screenshots.url,
+           platforms.name, involved_companies.company.name;
+    where id = ${gameId};
+  `;
+
+  const response = await fetch("https://api.igdb.com/v4/games", {
+    method: "POST",
+    headers: {
+      "Client-ID": clientId,
+      "Authorization": `Bearer ${token}`,
+      "Accept": "application/json"
+    },
+    body: query
+  });
+
+  // ✅ this is safe inside async function
+  const data = await response.json();
+  return data[0] || null;
+}
+
+
 
 const app = express();
 const PORT = process.env.PORT;
@@ -63,8 +99,24 @@ app.get("/games", async (req, res) => {
   const limit = 49;
   const search = req.query.search || "";
   const games = await fetchGames(gamespage, limit, search);
-  res.render("games.ejs", { games, gamespage, page:"games", search: "games" });
+  res.render("games.ejs", { games, gamespage, page: "games", search });
 });
+
+app.get("/game/:id", async (req, res) => {
+  const gameId = req.params.id;
+  console.log("➡ Fetching game with ID:", gameId);
+
+  const game = await fetchGameById(gameId);
+
+  if (!game) {
+    console.log("❌ No game found for ID:", gameId);
+    return res.status(404).send("Game not found");
+  }
+
+  console.log("✅ Game found:", game.name);
+  res.render("game.ejs", { game, page: "game" });
+});
+
 
 app.get("/register", (req, res) => {
   res.render("register.ejs", { page: "register" });
