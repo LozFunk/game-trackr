@@ -20,30 +20,22 @@ async function getAccessToken() {
 async function fetchGames(page = 1, limit = 49, search = "") {
   const token = await getAccessToken();
   const offset = (page - 1) * limit;
-
-  let query = `
-    fields id, cover.url, name, first_release_date, rating, summary, platforms.name, genres.name;
-    sort rating desc;
-    limit ${limit};
-    offset ${offset};
-  `;
-
+  let query = `fields name,cover.url,first_release_date; limit ${limit}; offset ${offset};`;
   if (search) {
-    query = `search "${search}"; ${query}`;
+    // IGDB search uses the 'search' keyword
+    query = `search "${search}"; ` + query;
   }
-
-  const response = await fetch("https://api.igdb.com/v4/games", {
-    method: "POST",
+  const response = await fetch('https://api.igdb.com/v4/games', {
+    method: 'POST',
     headers: {
-      "Client-ID": clientId,
-      "Authorization": `Bearer ${token}`,
-      "Accept": "application/json"
+      'Client-ID': clientId,
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json'
     },
     body: query
   });
-
-  const data = await response.json();
-  return data;
+  const games = await response.json();
+  return games; 
 }
 
 
