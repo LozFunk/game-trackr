@@ -2,11 +2,7 @@
 
 <div class="wrapper">
 
-  <form class="search" method="get" action="/games">
-    <input class="input" type="text" name="search" placeholder="Search games..." >
-    <button type="submit">Search</button>
-  </form>
-
+  
   <div class="cards-container">
   <% if (games.length > 0) { %>
     <% games.forEach(game => { %>
