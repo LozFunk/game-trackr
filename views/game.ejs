@@ -1,12 +1,15 @@
 <%- include('partials/header') %>
-<body class="game-page">
-  <div class="container">
+
+
+  <div class="wrapper">
     <a href="/games" class="back-link">← Back to Games</a>
 
-    <div class="game-header">
+    <div class="game-container">
+
+    <div class="game-card">
       <img src="<%= game.cover ? game.cover.url.replace('t_thumb', 't_cover_big') : '/placeholder.jpg' %>" alt="<%= game.name %>" class="cover">
 
-      <div class="game-meta">
+      <div class="game-card-meta">
         <h1><%= game.name %></h1>
 
         <% if (game.first_release_date) { %>
@@ -31,7 +34,7 @@
       </div>
     </div>
 
-    <div class="game-body">
+    <div class="game-summary">
       <% if (game.summary) { %>
         <h2>Summary</h2>
         <p><%= game.summary %></p>
@@ -51,5 +54,6 @@
         </div>
       <% } %>
     </div>
+  </div>
   </div>
   <%- include('partials/footer') %>

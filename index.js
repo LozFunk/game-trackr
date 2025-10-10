@@ -20,11 +20,14 @@ async function getAccessToken() {
 async function fetchGames(page = 1, limit = 49, search = "") {
   const token = await getAccessToken();
   const offset = (page - 1) * limit;
-  let query = `fields name,cover.url,first_release_date; limit ${limit}; offset ${offset};`;
+  let query = `fields name,cover.url,first_release_date,rating;
+  limit ${limit}; offset ${offset};`;
+
   if (search) {
     // IGDB search uses the 'search' keyword
     query = `search "${search}"; ` + query;
   }
+
   const response = await fetch('https://api.igdb.com/v4/games', {
     method: 'POST',
     headers: {
@@ -43,12 +46,12 @@ async function fetchGameById(gameId) {
   const token = await getAccessToken();
 
   const query = `
-    fields id, name, summary, storyline, rating, total_rating,
+    fields id, name, summary, storyline, rating, total_rating, rating_count,
            first_release_date, genres.name, cover.url, screenshots.url,
            platforms.name, involved_companies.company.name;
     where id = ${gameId};
   `;
-
+  console.log(query) 
   const response = await fetch("https://api.igdb.com/v4/games", {
     method: "POST",
     headers: {
@@ -58,6 +61,7 @@ async function fetchGameById(gameId) {
     },
     body: query
   });
+
 
   // ✅ this is safe inside async function
   const data = await response.json();
@@ -78,13 +82,6 @@ app.get("/", (req, res) => {
   res.render("home.ejs", { page: "home" });
 });
 
-app.get("/about", (req, res) => {
-  res.render("about.ejs", { page: "about" });
-});
-
-app.get("/contact", (req, res) => {
-  res.render("contact.ejs", { page: "contact" });
-});
 
 app.get("/games", async (req, res) => {
   const gamespage = parseInt(req.query.page) || 1;
@@ -101,11 +98,11 @@ app.get("/game/:id", async (req, res) => {
   const game = await fetchGameById(gameId);
 
   if (!game) {
-    console.log("❌ No game found for ID:", gameId);
+    console.log("No game found for ID:", gameId);
     return res.status(404).send("Game not found");
   }
 
-  console.log("✅ Game found:", game.name);
+  console.log("Game found:", game.name);
   res.render("game.ejs", { game, page: "game" });
 });
 

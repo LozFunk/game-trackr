@@ -20,12 +20,6 @@
         <% } %>
 
         <h2><%= game.name %></h2>
-
-        <% if (game.first_release_date) { %>
-          <p>Release: <%= new Date(game.first_release_date * 1000).toLocaleDateString() %></p>
-        <% } else { %>
-          <p>Release: Unknown</p>
-        <% } %>
       </a>
     <% }) %>
   <% } else { %>

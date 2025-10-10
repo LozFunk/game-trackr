@@ -160,6 +160,8 @@ h1{
     flex-direction: column;
     align-items: center;
     transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: inherit;
 }
 
 .game-card:hover {
@@ -252,4 +254,38 @@ h1{
 
 register-btn:hover{
     
+}
+
+.game-card-meta p {
+    text-align: left;
+    margin-top: 1rem;
+    color: #e2e2e2;
+    font-size: 1rem;
+}
+
+.game-container {
+    display: flex;
+}
+
+.game-summary {
+    padding-left: 2rem;
+}
+
+
+.screenshots img{
+    width: 240px;
+    height: auto;
+    margin: 0.5rem;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #e2e2e2;
+    text-decoration: none;
+    font-weight: bold;
+}   
+
+.back-link:hover {
+    color: #5c6bc0;
 }
