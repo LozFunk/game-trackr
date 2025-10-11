@@ -10,7 +10,6 @@
       <img src="<%= game.cover ? game.cover.url.replace('t_thumb', 't_cover_big') : '/placeholder.jpg' %>" alt="<%= game.name %>" class="cover">
 
       <div class="game-card-meta">
-        <h1><%= game.name %></h1>
 
         <% if (game.first_release_date) { %>
           <p><strong>Release Date:</strong> <%= new Date(game.first_release_date * 1000).toLocaleDateString() %></p>
@@ -35,18 +34,20 @@
     </div>
 
     <div class="game-summary">
+      <h1 class="game-name"><%= game.name %></h1>
+
       <% if (game.summary) { %>
-        <h2>Summary</h2>
-        <p><%= game.summary %></p>
+        <!-- <h2>Summary</h2> -->
+        <p class="summary-text"><%= game.summary %></p>
       <% } %>
 
-      <% if (game.storyline) { %>
+      <!-- <% if (game.storyline) { %>
         <h2>Storyline</h2>
         <p><%= game.storyline %></p>
-      <% } %>
+      <% } %> -->
 
       <% if (game.screenshots) { %>
-        <h2>Screenshots</h2>
+        <!-- <h2>Screenshots</h2> -->
         <div class="screenshots">
           <% game.screenshots.forEach(ss => { %>
             <img src="<%= ss.url.replace('t_thumb', 't_1080p') %>" alt="Screenshot">
