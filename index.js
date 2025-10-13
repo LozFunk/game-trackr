@@ -135,6 +135,13 @@ app.get("/game/:id", async (req, res) => {
   res.render("game.ejs", { game, page: "game" });
 });
 
+app.get("/profile", (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect("/login");
+  }
+  res.render("profile.ejs", { page: "profile" });
+});
+
 
 app.get("/register", (req, res) => {
   res.render("register.ejs", { page: "register" });
