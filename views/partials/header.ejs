@@ -11,12 +11,23 @@
 
 
 <div class="nav-bg">
-    <nav class="wrapper">
+    
+    <nav class="nav-wrapper">
+
+        <div class="left-nav-group">
+            <% if (user){ %>
+                <!-- Welcome message is now inside the new group -->
+                <span class="welcome-message">Hello, <%= user.username %>!</span>
+            <%} %>
+        </div>
+
+        <div class="center-nav-group">
         <ul>
             <li><a href="/" class="<%= page === 'home' ? 'active' : '' %>">Home</a></li>
             <li><a href="/games" class="<%= page === 'games' ? 'active' : '' %>">Games</a></li>
         </ul>
 
+        <div class="nav-search-bar">
         <form method="get" action="/games">
             <input class="input-field-nav" type="text" name="search" placeholder="Search games..." >
             <button class="search-button" type="submit" aria-label="Search">
@@ -25,10 +36,16 @@
                 </svg>
             </button>
         </form>
+        </div>
+
         
-        <div class="auth-links">
-            <a class="button signup" href="/register">Sign Up</a>
-            <a class="button login" href="/login">Login</a>
+        <div class="auth-links right-nav-group">
+            <% if (user){ %>
+                <a class="button login" href="/logout">Logout</a>
+            <%} else{ %>
+                <a class="button signup" href="/register">Sign Up</a>
+                <a class="button login" href="/login">Login</a>
+            <%} %>
         </div>
     </nav>
 </div>
