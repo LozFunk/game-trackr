@@ -109,6 +109,7 @@ async function fetchGameById(gameId) {
   return data[0] || null;
 };
 
+
 app.use((req, res, next) => {
   res.locals.user = req.user;
   next();
@@ -129,6 +130,7 @@ app.get("/games", async (req, res) => {
   res.render("games.ejs", { games, gamespage, page: "games", search});
 });
 
+
 app.get("/game/:id", async (req, res) => {
   const gameId = req.params.id;
   console.log("➡ Fetching game with ID:", gameId);
@@ -144,12 +146,68 @@ app.get("/game/:id", async (req, res) => {
   res.render("game.ejs", { game, page: "game" });
 });
 
-app.get("/profile", (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.redirect("/login");
+
+
+app.get("/profile", async (req, res) => {
+  if (!req.isAuthenticated()) return res.redirect("/login");
+
+  try {
+    const result = await db.query(
+      "SELECT * FROM user_games WHERE user_id = $1 ORDER BY id DESC",
+      [req.user.id]
+    );
+    res.render("profile.ejs", { page: "profile", games: result.rows });
+  } catch (err) {
+    console.error("Error loading profile:", err);
+    res.status(500).send("Error loading profile");
   }
-  res.render("profile.ejs", { page: "profile" });
 });
+
+
+app.post("/library/add", async (req, res) => {
+  if (!req.isAuthenticated()) return res.redirect("/login");
+
+  let { game_id, game_name, cover_url } = req.body;
+
+  if (cover_url) {
+  cover_url = cover_url
+    .replace("t_thumb", "t_cover_big");
+}
+
+  const user_id = req.user.id;
+
+  try {
+    await db.query(
+      `INSERT INTO user_games (user_id, game_id, game_name, cover_url)
+      VALUES ($1, $2, $3, $4)
+      ON CONFLICT (user_id, game_id) DO NOTHING`,
+      [user_id, game_id, game_name, cover_url]
+    );
+    res.redirect("/profile");
+  } catch (err) {
+    console.error("Error adding game:", err);
+    res.status(500).send("Error adding game to library");
+  }
+});
+
+app.post("/library/remove", async (req, res) => {
+  if (!req.isAuthenticated()) return res.redirect("/login");
+
+  const { game_id } = req.body;
+  const user_id = req.user.id;
+
+  try {
+    await db.query(
+      "DELETE FROM user_games WHERE user_id = $1 AND game_id = $2",
+      [user_id, game_id]
+    );
+    res.redirect("/profile");
+  } catch (err) {
+    console.error("Error removing game:", err);
+    res.status(500).send("Error removing game");
+  }
+});
+
 
 
 app.get("/register", (req, res) => {
@@ -196,6 +254,7 @@ app.post(
     failureRedirect: "/login",
   })
 );
+
 
 app.get("/logout", (req, res) => {
   req.logout(() => {

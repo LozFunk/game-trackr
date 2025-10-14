@@ -1,10 +1,28 @@
 <%- include ('partials/header') %>
 
     <section class="wrapper">
-    <h2 class="">profile</h2>
-    <p class="">
-        Track, Rate & Review Your Games
-    </p>
+
+<h1><%= user.username %>’s Game Library</h1>
+
+<div class="cards-container">
+
+<% if (games.length === 0) { %>
+  <p>No games in your library yet.</p>
+<% } else { %>
+    <% games.forEach(game => { %>
+        <a href="/game/<%= game.game_id  %>" class="game-card">
+        <img src="<%= game.cover_url || '/images/no-cover.png' %>" alt="<%= game.game_name %>">
+        <h3><%= game.game_name %></h3>
+        <form action="/library/remove" method="POST">
+          <input type="hidden" name="game_id" value="<%= game.game_id %>">
+          <button type="submit" class="btn btn-danger">Remove</button>
+        </form>
+        </a>
+
+        
+    <% }) %>  
+<% } %>
+ </div>
   </section>
 
 <%- include ('partials/footer') %>
