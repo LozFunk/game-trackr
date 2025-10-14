@@ -1,6 +1,5 @@
 import express from 'express';  
 import bodyParser from 'body-parser';
-import fetch from 'node-fetch';
 import env from 'dotenv';
 import pg from 'pg';
 import bcrypt from "bcrypt";
@@ -22,6 +21,11 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000 // 1 day
+    }
   })
 );
 
@@ -50,28 +54,33 @@ async function getAccessToken() {
 }
 
 async function fetchGames(page = 1, limit = 49, search = "") {
-  const token = await getAccessToken();
-  const offset = (page - 1) * limit;
-  let query = `fields name,cover.url,first_release_date,rating;
-  limit ${limit}; offset ${offset};`;
+  try {
+    const token = await getAccessToken();
+    const offset = (page - 1) * limit;
+    let query = `fields name,cover.url,first_release_date,rating;
+    limit ${limit}; offset ${offset};`;
 
-  if (search) {
-    // IGDB search uses the 'search' keyword
-    query = `search "${search}"; ` + query;
+    if (search) {
+      // IGDB search uses the 'search' keyword
+      query = `search "${search}"; ` + query;
+    }
+
+    const response = await fetch('https://api.igdb.com/v4/games', {
+      method: 'POST',
+      headers: {
+        'Client-ID': clientId,
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      },
+      body: query
+    });
+    const games = await response.json();
+    return games; 
+  } catch (error) {
+    console.error("Error fetching games:", error);
+    return [];
   }
-
-  const response = await fetch('https://api.igdb.com/v4/games', {
-    method: 'POST',
-    headers: {
-      'Client-ID': clientId,
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/json'
-    },
-    body: query
-  });
-  const games = await response.json();
-  return games; 
-}
+} 
 
 
 async function fetchGameById(gameId) {
