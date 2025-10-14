@@ -31,16 +31,22 @@
           <p><strong>Genres:</strong> <%= game.genres.map(g => g.name).join(', ') %></p>
         <% } %>
 
-        <% if (user) { %>
-        <form action="/library/add" method="POST">
-          <input type="hidden" name="game_id" value="<%= game.id %>">
-          <input type="hidden" name="game_name" value="<%= game.name %>">
-          <input type="hidden" name="cover_url" value="<%= game.cover?.url || '' %>">
-          <button type="submit" class="btn">Add to Library</button>
-        </form>
-      <% } else { %>
-        <a href="/login">Login to add to your library</a>
-      <% } %>
+       <% if (user) { %>
+          <% if (inLibrary) { %>
+            <form action="/library/remove" method="POST">
+              <input type="hidden" name="game_id" value="<%= game.id %>">
+              <button type="submit" class="btn btn-danger">Remove</button>
+            </form>
+          <% } else { %>
+            <form action="/library/add" method="POST">
+              <input type="hidden" name="game_id" value="<%= game.id %>">
+              <input type="hidden" name="game_name" value="<%= game.name %>">
+              <button type="submit" class="btn btn-primary">Add to Library</button>
+            </form>
+          <% } %>
+        <% } else { %>
+          <a href="/login">Login to add this game to your library</a>
+        <% } %>
       </div>
     </div>
 

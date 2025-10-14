@@ -142,8 +142,18 @@ app.get("/game/:id", async (req, res) => {
     return res.status(404).send("Game not found");
   }
 
-  console.log("Game found:", game.name);
-  res.render("game.ejs", { game, page: "game" });
+  let inLibrary = false;
+  if (req.isAuthenticated()) {
+    const result = await db.query(
+      "SELECT * FROM user_games WHERE user_id = $1 AND game_id = $2",
+      [req.user.id, gameId]
+    );
+    inLibrary = result.rows.length > 0;
+  }
+
+  console.log("Game found:", game.name, "| In library:", inLibrary);
+
+  res.render("game.ejs", { game, page: "game", inLibrary });
 });
 
 
