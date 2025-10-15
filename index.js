@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import session from "express-session";
+import GoogleStrategy from "passport-google-oauth20";
 
 env.config();
 const app = express();
@@ -272,6 +273,22 @@ app.get("/logout", (req, res) => {
   });
 });
 
+// Start Google login
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { 
+    scope: ["profile", "email"] })
+);
+
+// Google callback
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+  })
+);
+
 
 
 passport.use(
@@ -287,6 +304,39 @@ passport.use(
         if (!valid) return done(null, false, { message: "Incorrect password" });
 
         return done(null, user);
+      } catch (err) {
+        return done(err);
+      }
+    }
+  )
+);
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL:
+        process.env.NODE_ENV === "production"
+          ? "https://your-domain.com/auth/google/callback"
+          : "http://localhost:3000/auth/google/callback",
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        // Check if the user already exists
+        const result = await db.query("SELECT * FROM users WHERE google_id = $1", [profile.id]);
+
+        if (result.rows.length > 0) {
+          // User exists
+          return done(null, result.rows[0]);
+        } else {
+          // Create new user
+          const newUser = await db.query(
+            "INSERT INTO users (username, email, google_id) VALUES ($1, $2, $3) RETURNING *",
+            [profile.displayName, profile.emails?.[0]?.value, profile.id]
+          );
+          return done(null, newUser.rows[0]);
+        }
       } catch (err) {
         return done(err);
       }
