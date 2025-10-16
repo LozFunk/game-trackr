@@ -304,24 +304,34 @@ h1{
 
 .pagination {
     display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    }
+    justify-content: center;      /* center pagination */
+    align-items: center;
+    gap: 0.5rem;                 /* space between buttons */
+    margin: 2rem 0;              /* spacing from content */
+    font-family: sans-serif;
+}
 
-.pagination a, .pagination span {
-    background: #27272a;
-    color: #f4f4f5;
-    padding: 0.5rem 1.2rem;
-    border-radius: 0.5rem;
+.pagination a,
+.pagination span {
+    display: inline-block;
+    padding: 0.5rem 0.8rem;
+    border-radius: 5px;
     text-decoration: none;
-    font-weight: bold;
-    transition: background 0.2s;
+    color: whitesmoke;
+    transition: background 0.2s, color 0.2s;
+    border: 2px solid transparent;
 }
 
 .pagination a:hover {
-    background: #6366f1;
-    color: #fff;
+    background-color: transparent;
+    color: #2980b9;
+}
+
+.pagination span {
+    background-color: transparent;   /* highlight current page */
+    color: white;
+    border-color: #2980b9;
+    font-weight: 600;
 }
 
 .no-results {
