@@ -35,13 +35,14 @@
           <% if (inLibrary) { %>
             <form action="/library/remove" method="POST">
               <input type="hidden" name="game_id" value="<%= game.id %>">
-              <button type="submit" class="btn btn-danger">Remove</button>
+              <button type="submit" class="button">Remove</button>
             </form>
           <% } else { %>
             <form action="/library/add" method="POST">
               <input type="hidden" name="game_id" value="<%= game.id %>">
               <input type="hidden" name="game_name" value="<%= game.name %>">
-              <button type="submit" class="btn btn-primary">Add to Library</button>
+               <input type="hidden" name="cover_url" value="<%= game.cover.url %>">
+              <button type="submit" class="button">Add to Library</button>
             </form>
           <% } %>
         <% } else { %>
