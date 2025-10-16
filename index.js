@@ -204,6 +204,44 @@ app.post("/comments/:id/delete", async (req, res) => {
   }
 });
 
+app.post("/comments/:id/edit", async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect("/login");
+  }
+
+  const commentId = req.params.id;
+  const { content } = req.body;
+
+  if (!content || content.trim().length === 0) {
+    return res.redirect('back');
+  }
+
+  try {
+    // Verify comment ownership
+    const commentResult = await db.query(
+      "SELECT * FROM comments WHERE id = $1 AND user_id = $2",
+      [commentId, req.user.id]
+    );
+
+    if (commentResult.rows.length === 0) {
+      return res.status(403).send("You are not allowed to edit this comment.");
+    }
+
+    // Update content and set edited_at
+    await db.query(
+      "UPDATE comments SET content = $1, edited_at = NOW() WHERE id = $2",
+      [content.trim(), commentId]
+    );
+
+    const gameId = commentResult.rows[0].game_id;
+    res.redirect(`/game/${gameId}`);
+  } catch (err) {
+    console.error("Error editing comment:", err);
+    res.status(500).send("Server error");
+  }
+});
+
+
 
 
 

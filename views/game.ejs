@@ -6,7 +6,7 @@
 
     <div class="game-container">
 
-    <div class="game-card">
+    <div class="game-card-info">
       <img src="<%= game.cover ? game.cover.url.replace('t_thumb', 't_cover_big') : '/placeholder.jpg' %>" alt="<%= game.name %>" class="cover">
 
       <div class="game-card-meta">
@@ -73,40 +73,57 @@
         </div>
 
         <div class="comments-section">
-  <h2>Comments</h2>
+          <h2>Comments</h2>
 
-  <% if (user) { %>
-    <form action="/comments/<%= game.id %>" method="POST" class="comment-form">
-      <textarea name="content" rows="3" required placeholder="Write your comment..."></textarea>
-      <button type="submit" class="button">Post Comment</button>
-    </form>
-  <% } else { %>
-    <p><a href="/login">Login</a> to post a comment.</p>
-  <% } %>
+          <% if (user) { %>
+            <form action="/comments/<%= game.id %>" method="POST" class="comment-form">
+              <textarea name="content" rows="3" required placeholder="Write your comment..."></textarea>
+              <button type="submit" class="button">Post Comment</button>
+            </form>
+          <% } else { %>
+            <p><a href="/login">Login</a> to post a comment.</p>
+          <% } %>
 
-  <% if (comments && comments.length > 0) { %>
-    <ul class="comment-list"></ul>
-  <% comments.forEach(comment => { %>
-    <li class="comment">
-      <p>
-        <strong><%= comment.username %></strong>
-        <span class="date"><%= new Date(comment.created_at).toLocaleString() %></span>
-      </p>
-      <p><%= comment.content %></p>
+          <% if (comments && comments.length > 0) { %>
+            <div class="comments-box">
+            <ul class="comment-list"></ul>
+          <% comments.forEach(comment => { %>
+            <li class="comment">
+              <div class="comment-header">
+                <p class="comment-meta">
+                  <strong><%= comment.username %></strong>
+                  <span class="date"><%= new Date(comment.created_at).toLocaleString() %></span>
 
-      <% if (user && user.id === comment.user_id) { %>
-        <form action="/comments/<%= comment.id %>/delete" method="POST" style="display:inline;">
-          <button type="submit" class="delete-button" onclick="return confirm('Delete this comment?')">🗑️ Delete</button>
-        </form>
-      <% } %>
-    </li>
-  <% }) %>
-</ul>
+                  <% if (comment.edited_at) { %>
+                    <span class="edited">(edited <%= new Date(comment.edited_at).toLocaleString() %>)</span>
+                  <% } %>
+                </p>
+            
+                <% if (user && user.id === comment.user_id) { %>
+                  <form action="/comments/<%= comment.id %>/delete" method="POST" class="delete-form">
+                    <button type="button" class="edit-button" onclick="startEdit(<%= comment.id %>)">Edit</button>
+                    <span>|</span>
+                    <button type="submit" class="delete-button" onclick="return confirm('Delete this comment?')">Delete</button>
+                  </form>
+                <% } %>
+              </div>
+                <!-- Display mode -->
+                <p class="comment-content" id="content-<%= comment.id %>"><%= comment.content %></p>
 
-  <% } else { %>
-    <p>No comments yet. Be the first to write one!</p>
-  <% } %>
-</div>
+                <!-- Edit mode (hidden by default) -->
+                <form action="/comments/<%= comment.id %>/edit" method="POST" class="edit-form" id="form-<%= comment.id %>" style="display: none;">
+                  <textarea name="content" rows="2" required><%= comment.content %></textarea>
+                  <button type="submit" class="button">Save</button>
+                  <button type="button" class="button cancel-button" onclick="cancelEdit(<%= comment.id %>)">Cancel</button>
+                </form>
+            </li>
+          <% }) %>
+          </ul>
+          </div>
+          <% } else { %>
+            <p>No comments yet. Be the first to write one!</p>
+          <% } %>
+        </div>
       <% } %>
     </div>
   </div>
@@ -115,3 +132,15 @@
 
   </div>
   <%- include('partials/footer') %>
+
+  <script>
+function startEdit(commentId) {
+  document.getElementById(`content-${commentId}`).style.display = 'none';
+  document.getElementById(`form-${commentId}`).style.display = 'block';
+}
+
+function cancelEdit(commentId) {
+  document.getElementById(`form-${commentId}`).style.display = 'none';
+  document.getElementById(`content-${commentId}`).style.display = 'block';
+}
+</script>
