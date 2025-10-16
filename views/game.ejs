@@ -73,12 +73,15 @@
         </div>
 
         <div class="comments-section">
-          <h2>Comments</h2>
+          <h2>Comments (<%= comments ? comments.length : 0 %>)</h2>
 
           <% if (user) { %>
-            <form action="/comments/<%= game.id %>" method="POST" class="comment-form">
-              <textarea name="content" rows="3" required placeholder="Write your comment..."></textarea>
-              <button type="submit" class="button">Post Comment</button>
+            <button type="button" id="show-comment-form" class="button">Post Comment</button>
+
+            <form action="/comments/<%= game.id %>" method="POST" class="comment-form" id="comment-form" style="display: none; margin-top: 1rem;">
+                  <textarea name="content" rows="3" required placeholder="Write your comment..."></textarea>
+                  <button type="submit" class="button">Submit</button>
+                  <button type="button" id="cancel-comment" class="button">Cancel</button>
             </form>
           <% } else { %>
             <p><a href="/login">Login</a> to post a comment.</p>
@@ -133,7 +136,7 @@
   </div>
   <%- include('partials/footer') %>
 
-  <script>
+<script>
 function startEdit(commentId) {
   document.getElementById(`content-${commentId}`).style.display = 'none';
   document.getElementById(`form-${commentId}`).style.display = 'block';
@@ -142,5 +145,23 @@ function startEdit(commentId) {
 function cancelEdit(commentId) {
   document.getElementById(`form-${commentId}`).style.display = 'none';
   document.getElementById(`content-${commentId}`).style.display = 'block';
+}
+
+const showFormButton = document.getElementById('show-comment-form');
+const commentForm = document.getElementById('comment-form');
+const cancelButton = document.getElementById('cancel-comment');
+
+if (showFormButton) {
+  showFormButton.addEventListener('click', () => {
+    commentForm.style.display = 'block';
+    showFormButton.style.display = 'none'; // hide the "Post Comment" button
+  });
+}
+
+if (cancelButton) {
+  cancelButton.addEventListener('click', () => {
+    commentForm.style.display = 'none';
+    showFormButton.style.display = 'inline-block'; // show the button again
+  });
 }
 </script>

@@ -498,7 +498,6 @@ h1{
     color: #e74c3c;
     cursor: pointer;
     font-size: 0.9em;
-    margin-left: 8px;
 }
 
 .delete-button:hover {
@@ -519,6 +518,6 @@ h1{
 }
 
 .edited {
-  font-size: 0.8em;
-  color: #777;
+    font-size: 0.8em;
+    color: #777;
 }
