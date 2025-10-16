@@ -369,3 +369,31 @@ h1{
     font-size: 1rem;
     color: #e2e2e2;
 }
+
+.comments-section {
+  margin-top: 2rem;
+}
+
+.comment-form textarea {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+  resize: vertical;
+}
+
+.comment-list {
+  list-style: none;
+  padding: 0;
+}
+
+.comment {
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+}
+
+.comment .date {
+  color: #777;
+  font-size: 0.9em;
+  margin-left: 6px;
+}

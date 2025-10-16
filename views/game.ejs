@@ -71,8 +71,47 @@
             <img src="<%= ss.url.replace('t_thumb', 't_1080p') %>" alt="Screenshot">
           <% }) %>
         </div>
+
+        <div class="comments-section">
+  <h2>Comments</h2>
+
+  <% if (user) { %>
+    <form action="/comments/<%= game.id %>" method="POST" class="comment-form">
+      <textarea name="content" rows="3" required placeholder="Write your comment..."></textarea>
+      <button type="submit" class="button">Post Comment</button>
+    </form>
+  <% } else { %>
+    <p><a href="/login">Login</a> to post a comment.</p>
+  <% } %>
+
+  <% if (comments && comments.length > 0) { %>
+    <ul class="comment-list"></ul>
+  <% comments.forEach(comment => { %>
+    <li class="comment">
+      <p>
+        <strong><%= comment.username %></strong>
+        <span class="date"><%= new Date(comment.created_at).toLocaleString() %></span>
+      </p>
+      <p><%= comment.content %></p>
+
+      <% if (user && user.id === comment.user_id) { %>
+        <form action="/comments/<%= comment.id %>/delete" method="POST" style="display:inline;">
+          <button type="submit" class="delete-button" onclick="return confirm('Delete this comment?')">🗑️ Delete</button>
+        </form>
+      <% } %>
+    </li>
+  <% }) %>
+</ul>
+
+  <% } else { %>
+    <p>No comments yet. Be the first to write one!</p>
+  <% } %>
+</div>
       <% } %>
     </div>
   </div>
+
+  
+
   </div>
   <%- include('partials/footer') %>

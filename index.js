@@ -136,26 +136,75 @@ app.get("/game/:id", async (req, res) => {
   const gameId = req.params.id;
   console.log("➡ Fetching game with ID:", gameId);
 
-  const game = await fetchGameById(gameId);
+  try {
+    const game = await fetchGameById(gameId);
 
-  if (!game) {
-    console.log("No game found for ID:", gameId);
-    return res.status(404).send("Game not found");
-  }
+    if (!game) {
+      console.log("No game found for ID:", gameId);
+      return res.status(404).send("Game not found");
+    }
 
-  let inLibrary = false;
-  if (req.isAuthenticated()) {
-    const result = await db.query(
-      "SELECT * FROM user_games WHERE user_id = $1 AND game_id = $2",
-      [req.user.id, gameId]
+    // Check if in library
+    let inLibrary = false;
+    if (req.isAuthenticated()) {
+      const result = await db.query(
+        "SELECT * FROM user_games WHERE user_id = $1 AND game_id = $2",
+        [req.user.id, gameId]
+      );
+      inLibrary = result.rows.length > 0;
+    }
+
+    // 🆕 Fetch comments
+    const commentsResult = await db.query(
+      "SELECT * FROM comments WHERE game_id = $1 ORDER BY created_at DESC",
+      [gameId]
     );
-    inLibrary = result.rows.length > 0;
+    const comments = commentsResult.rows;
+
+    res.render("game.ejs", {
+      game,
+      page: "game",
+      inLibrary,
+      comments,   // ✅ add this
+      user: req.user // ✅ add this if you're checking for login in EJS
+    });
+
+  } catch (err) {
+    console.error("Error loading game:", err);
+    res.status(500).send("Server error");
+  }
+});
+
+app.post("/comments/:id/delete", async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect("/login");
   }
 
-  console.log("Game found:", game.name, "| In library:", inLibrary);
+  const commentId = req.params.id;
 
-  res.render("game.ejs", { game, page: "game", inLibrary });
+  try {
+    // Verify comment belongs to this user
+    const commentResult = await db.query(
+      "SELECT * FROM comments WHERE id = $1 AND user_id = $2",
+      [commentId, req.user.id]
+    );
+
+    if (commentResult.rows.length === 0) {
+      return res.status(403).send("You are not allowed to delete this comment.");
+    }
+
+    // Delete comment
+    const comment = commentResult.rows[0];
+    await db.query("DELETE FROM comments WHERE id = $1", [commentId]);
+
+    res.redirect(`/game/${comment.game_id}`);
+  } catch (err) {
+    console.error("Error deleting comment:", err);
+    res.status(500).send("Server error");
+  }
 });
+
+
 
 
 
@@ -216,6 +265,33 @@ app.post("/library/remove", async (req, res) => {
   } catch (err) {
     console.error("Error removing game:", err);
     res.status(500).send("Error removing game");
+  }
+});
+
+app.post("/comments/:gameId", async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect("/login");
+  }
+
+  const { gameId } = req.params;
+  const { content } = req.body;
+
+  if (!content || content.trim().length === 0) {
+    return res.redirect(`/game/${gameId}`);
+  }
+  if (content.length > 1000) {
+    return res.status(400).send("Comment too long (max 1000 characters)");
+  }
+
+  try {
+    await db.query(
+      "INSERT INTO comments (game_id, user_id, username, content) VALUES ($1, $2, $3, $4)",
+      [gameId, req.user.id, req.user.username, content.trim()]
+    );
+    res.redirect(`/game/${gameId}`);
+  } catch (err) {
+    console.error("Error adding comment:", err);
+    res.status(500).send("Server error");
   }
 });
 
