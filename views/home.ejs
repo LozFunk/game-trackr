@@ -1,13 +1,55 @@
 <%- include ('partials/header') %>
 
-    <section class="wrapper">
-    <div class="hero"><h2 class="">Track, Rate & Review Your Games</h2></div>
-    
-    <div><p class="">
-      Build your personal game library — log what you play, give scores, and keep your own notes.
-    </p></div>
-    
-  </section>
+<body>
+  <header class="hero">
+    <div class="hero-content">
+      <h1>Welcome to <span class="highlight">GameTrackr</span></h1>
+      <p class="subtitle">
+        Discover new games, track what you own, and build your ultimate library.
+      </p>
+
+      <% if (!user) { %>
+        <div class="hero-buttons">
+          <a href="/register" class="btn btn-primary">Get Started</a>
+          <a href="/login" class="btn btn-secondary">Login</a>
+        </div>
+      <% } else { %>
+        <div class="hero-buttons">
+          <a href="/games" class="btn btn-primary">Browse Games</a>
+          <a href="/profile" class="btn btn-secondary">My Library</a>
+        </div>
+      <% } %>
+    </div>
+  </header>
+
+  <main class="features">
+    <section class="feature">
+      <img src="/images/browse.svg" alt="Browse Games" />
+      <h2>Browse Thousands of Games</h2>
+      <p>
+        Search and explore games from the massive IGDB database — from
+        blockbusters to hidden gems.
+      </p>
+    </section>
+
+    <section class="feature">
+      <img src="/images/track.svg" alt="Track Library" />
+      <h2>Track Your Library</h2>
+      <p>
+        Add your favorite games to your personal library and manage them all in one place.
+      </p>
+    </section>
+
+    <section class="feature">
+      <img src="/images/connect.svg" alt="Stay Connected" />
+      <h2>Stay Updated</h2>
+      <p>
+        Get quick access to game details, platforms, genres, and ratings directly from IGDB.
+      </p>
+    </section>
+  </main>
+
+</body>
 
 <%- include ('partials/footer') %>
 
