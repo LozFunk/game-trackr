@@ -1,26 +1,26 @@
 <%- include ('partials/header') %>
 
 <body>
-  <header class="hero">
-    <div class="hero-content">
-      <h1>Welcome to <span class="highlight">GameTrackr</span></h1>
-      <p class="subtitle">
-        Discover new games, track what you own, and build your ultimate library.
-      </p>
+<header class="hero">
+  <div class="hero-content">
+    <h1>Welcome to <span class="highlight">GameTrackr</span></h1>
+    <p class="subtitle">
+      Discover new games, track what you own, and build your ultimate library.
+    </p>
 
-      <% if (!user) { %>
-        <div class="hero-buttons">
-          <a href="/register" class="btn btn-primary">Get Started</a>
-          <a href="/login" class="btn btn-secondary">Login</a>
-        </div>
-      <% } else { %>
-        <div class="hero-buttons">
-          <a href="/games" class="btn btn-primary">Browse Games</a>
-          <a href="/profile" class="btn btn-secondary">My Library</a>
-        </div>
-      <% } %>
-    </div>
-  </header>
+    <% if (!user) { %>
+      <div class="hero-buttons">
+        <a href="/register" class="btn btn-primary">Get Started</a>
+        <a href="/login" class="btn btn-secondary">Login</a>
+      </div>
+    <% } else { %>
+      <div class="hero-buttons">
+        <a href="/games" class="btn btn-primary">Browse Games</a>
+        <a href="/profile" class="btn btn-secondary">My Library</a>
+      </div>
+    <% } %>
+  </div>
+</header>
 
   <main class="features">
     <section class="feature">
