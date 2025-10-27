@@ -101,15 +101,24 @@ nav ul li a.active {
     gap: 15px;
 }
 
+
+
 .button {
-    padding: 5px 15px;
+    display: inline-flex;          /* enables flex alignment */
+    align-items: center;           /* vertical centering */
+    justify-content: center;       /* horizontal centering */
+
+    padding: 10px 15px;
     background-color: #5c6bc0;
     border: 2px solid #5c6bc0;
     border-radius: 5px;
     color: #e2e2e2;
     text-decoration: none;
     font-weight: bold;
+    line-height: 1;                /* prevents text from stretching */
+    cursor: pointer;               /* adds proper button pointer */
 }
+
 
 .button:hover{
     background-color: #3949ab;
@@ -117,22 +126,29 @@ nav ul li a.active {
     border: 2px solid #3949ab;
 }
 
-.signup {
+.secondary {
     background-color: #222d3b;
     border: 2px solid #5c6bc0;
 }
 
-.signup:hover {
+.secondary:hover {
     background-color: #3949ab;
     color: #e2e2e2;
     border: 2px solid #3949ab;
 }
 
-.login:hover {
+.primary:hover {
     background-color: #3949ab;
     color: #e2e2e2;
     border: 2px solid #3949ab;
 }
+
+form .button{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1rem;
+    padding: 17px;
+}
+
 
 h1{
     margin-bottom: 10px;
@@ -354,15 +370,12 @@ h1{
 
 }
 
-.register-btn{
+
+form .button{
     width: 100%;
     height: 30px;
-}
-
-.register-btn:hover{
-    background-color: #3949ab;
-    color: #e2e2e2;
-    border: 2px solid #3949ab;
+    text-align:center;
+    justify-content: center;
 }
 
 .game-card-meta p {
@@ -686,7 +699,7 @@ h1{
 }
 
 .hero .highlight {
-  color: #00aaff;
+  color: #e07823;
 }
 
 .subtitle {
@@ -713,8 +726,6 @@ h1{
   border: 2px solid #00aaff;
   color: #00aaff;
 }
-
-
 
 
 .features {
