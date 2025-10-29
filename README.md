@@ -18,6 +18,20 @@ This web application is still a work in progress.
 - EJS templates (views)
 - Custom dark CSS (no Tailwind required)
 
+## Screenshots
+
+### Home Page
+![Home](screenshots/home.png)
+
+### Game List
+![Games](screenshots/games.png)
+
+### Game Details
+![Game Detail](screenshots/game-details.png)
+
+### Registration Form
+![Registration Form](screenshots/registration.png)
+
 ---
 
 ## Repo structure
@@ -185,7 +199,3 @@ Troubleshooting: if styling does not appear, check browser DevTools Network tab 
 Add license text or file (e.g., MIT) as appropriate.
 
 ---
-
-- Add example `.env.example`.
-- Add a `dev` script to package.json for nodemon.
-- Provide code for login middleware or for rendering page numbers in
