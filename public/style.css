@@ -672,34 +672,36 @@ form .button{
 .hero {
   position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   height: 100%; /* Full screen */
-  background: url('https://wallpapers.com/images/high/hd-video-game-characters-g4d3cwvbla0kb554.webp') center/cover no-repeat;
+  background: url("./images/gametrackr-hero.png") center/cover no-repeat;
   color: #fff;
-  text-align: center;
+  text-align: left;
+  background-position: 0 10%;
+  height: 500px;
 }
 
-/* Blurry, frosted glass effect */
 .hero-content {
-  background: rgba(255, 255, 255, 0.1); /* translucent overlay */
-  backdrop-filter: blur(4px); /* main blur effect */
-  -webkit-backdrop-filter: blur(10px); /* for Safari */
-  width: 100%;
-  height: 100%;
-  border-radius: 1rem;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-  align-content: center;
+  display: flex;
+  flex-direction: column;
+  margin-left: 200px;
+  align-items: flex-start; /* aligns child elements to the left */
+  text-align: left;
+  max-width: 500px;        /* ensures text inside those children is left-aligned */
 }
+
 
 /* Text styling */
 .hero h1 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  
 }
 
 .hero .highlight {
-  color: #e07823;
+  color:#e07823;
+   
 }
 
 .subtitle {
@@ -708,12 +710,11 @@ form .button{
 }
 
 /* Buttons */
-.hero-buttons .btn {
-  margin: 0.5rem;
-  padding: 0.75rem 1.5rem;
+.hero-buttons {
   border-radius: 0.5rem;
   text-decoration: none;
   font-weight: bold;
+  align-self: left;
 }
 
 .btn-primary {
@@ -740,6 +741,9 @@ form .button{
   text-align: center;
   max-width: 300px;
   margin: 20px;
+  border-radius: 1rem;
+  box-shadow: 0 4px 24px #0004;
+  padding: 20px;
 }
 
 .feature img {
