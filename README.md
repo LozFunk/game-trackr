@@ -1,6 +1,6 @@
 # Game Trackr
 
-Simple Express + EJS app to browse and track video games (IGDB).  
+Express + EJS app to browse and track video games (IGDB).  
 Dark-themed UI with card-style game listings, search, pagination and session-based authentication.
 
 ## Project Status
