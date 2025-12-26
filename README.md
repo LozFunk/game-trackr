@@ -18,6 +18,10 @@ This web application is still a work in progress.
 - EJS templates (views)
 - Custom dark CSS (no Tailwind required)
 
+## Live Demo
+
+View the live site: [Game Trackr](https://game-trackr.up.railway.app)
+
 ## Screenshots
 
 ### Home Page
