@@ -26,14 +26,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 
+app.set("trust proxy", 1);
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    proxy: true,
     cookie: {
       secure: process.env.NODE_ENV === "production",
       httpOnly: true,
+      sameSite: "lax",
       maxAge: 24 * 60 * 60 * 1000 // 1 day
     }
   })
@@ -381,13 +385,22 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-  })
-);
+app.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) return next(err);
+    if (!user) {
+      console.log("Login failed:", info);
+      return res.redirect("/login");
+    }
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      console.log("Login success - req.user:", req.user);
+      console.log("Session after login:", req.session);
+      console.log("Cookies in request:", req.headers.cookie);
+      return res.redirect("/");
+    });
+  })(req, res, next);
+});
 
 
 app.get("/logout", (req, res) => {
@@ -417,15 +430,26 @@ app.get(
 passport.use(
   new LocalStrategy(
     { usernameField: "username", passwordField: "password" },
-    async (username, password, done) => {
+    async (identifier, password, done) => {
       try {
-        const result = await db.query("SELECT * FROM users WHERE username = $1", [username]);
-        if (result.rows.length === 0) return done(null, false, { message: "User not found" });
+        console.log("LocalStrategy attempt:", identifier);
+        const result = await db.query(
+          "SELECT * FROM users WHERE username = $1 OR email = $1",
+          [identifier]
+        );
+        if (result.rows.length === 0) {
+          console.log("User not found for:", identifier);
+          return done(null, false, { message: "User not found" });
+        }
 
         const user = result.rows[0];
         const valid = await bcrypt.compare(password, user.password);
-        if (!valid) return done(null, false, { message: "Incorrect password" });
+        if (!valid) {
+          console.log("Incorrect password for:", identifier);
+          return done(null, false, { message: "Incorrect password" });
+        }
 
+        console.log("Authentication OK for user id:", user.id);
         return done(null, user);
       } catch (err) {
         return done(err);
@@ -468,10 +492,12 @@ passport.use(
 );
 
 passport.serializeUser((user, cb) => {
+  console.log("serializeUser:", user && user.id ? user.id : user);
   cb(null, user.id);
 });
 
 passport.deserializeUser(async (id, cb) => {
+  console.log("deserializeUser id:", id);
   try {
     const result = await db.query("SELECT * FROM users WHERE id = $1", [id]);
     cb(null, result.rows[0]);
