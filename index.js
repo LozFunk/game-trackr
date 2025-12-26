@@ -1,14 +1,24 @@
-import express from 'express';  
 import bodyParser from 'body-parser';
 import env from 'dotenv';
+env.config();
+
+import express from 'express';  
 import pg from 'pg';
 import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import session from "express-session";
 import GoogleStrategy from "passport-google-oauth20";
+const { Pool } = pg;
 
-env.config();
+const db = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }, // required for Railway
+});
+
+export default db;
+
+
 const app = express();
 app.set("view engine", "ejs");
 const PORT = process.env.PORT;
@@ -33,14 +43,14 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-const db = new pg.Client({
-  user: process.env.PG_USER,
-  host: process.env.PG_HOST,
-  database: process.env.PG_DATABASE,
-  password: process.env.PG_PASSWORD,
-  port: process.env.PG_PORT,
-});
-db.connect();
+// const db = new pg.Client({
+//   user: process.env.PG_USER,
+//   host: process.env.PG_HOST,
+//   database: process.env.PG_DATABASE,
+//   password: process.env.PG_PASSWORD,
+//   port: process.env.PG_PORT,
+// });
+// db.connect();
 
 const clientId = process.env.API_CLIENT_ID;
 const clientSecret = process.env.API_CLIENT_SECRET;
@@ -432,7 +442,7 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL:
         process.env.NODE_ENV === "production"
-          ? "https://your-domain.com/auth/google/callback"
+          ? "https://game-trackr.up.railway.app/auth/google/callback"
           : "http://localhost:3000/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
