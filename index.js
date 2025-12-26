@@ -18,6 +18,7 @@ const db = new Pool({
 
 export default db;
 
+db.connect();
 
 const app = express();
 app.set("view engine", "ejs");
