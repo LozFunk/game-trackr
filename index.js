@@ -50,7 +50,7 @@ app.use(passport.session());
 //   password: process.env.PG_PASSWORD,
 //   port: process.env.PG_PORT,
 // });
-// db.connect();
+db.connect();
 
 const clientId = process.env.API_CLIENT_ID;
 const clientSecret = process.env.API_CLIENT_SECRET;
