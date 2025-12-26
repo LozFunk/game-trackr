@@ -52,11 +52,6 @@ app.use(passport.session());
 // });
 
 db.connect()
-  .then(() => console.log("Database connected"))
-  .catch(err => {
-    console.error("Database connection failed:", err);
-    process.exit(1); // stops the app if DB connection fails
-  });
 
 const clientId = process.env.API_CLIENT_ID;
 const clientSecret = process.env.API_CLIENT_SECRET;
